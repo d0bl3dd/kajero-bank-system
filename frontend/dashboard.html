@@ -5,31 +5,49 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Dashboard | Kajero</title>
+  <title>Kajero Bank</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-zinc-950 text-white min-h-screen p-6">
 
-  <div class="max-w-6xl mx-auto">
+  <!-- TOAST -->
+  <div
+    id="toast"
+    class="fixed top-5 right-5 hidden px-6 py-4 rounded-2xl shadow-2xl font-semibold z-50"
+  ></div>
+
+  <div class="max-w-7xl mx-auto">
 
     <!-- HEADER -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 mb-10">
 
       <div>
-        <h1 class="text-4xl md:text-5xl font-black tracking-tight">
-          Kajero Bank
+
+        <p class="text-zinc-500 uppercase tracking-[0.3em] text-sm mb-3">
+          Kajero Secure Banking
+        </p>
+
+        <h1
+          id="welcomeName"
+          class="text-5xl font-black tracking-tight"
+        >
+          Bienvenido
         </h1>
 
-        <p class="text-zinc-400 mt-2">
-          Panel bancario principal
+        <p
+          id="welcomeEmail"
+          class="text-zinc-400 mt-3"
+        >
+          usuario@email.com
         </p>
+
       </div>
 
       <button
         id="logoutBtn"
-        class="bg-red-500 hover:bg-red-600 transition px-6 py-3 rounded-2xl font-semibold shadow-lg"
+        class="bg-red-500 hover:bg-red-600 transition px-6 py-3 rounded-2xl font-bold shadow-xl"
       >
         Cerrar sesión
       </button>
@@ -39,54 +57,55 @@
     <!-- GRID -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-      <!-- SALDO -->
-      <div class="lg:col-span-2 bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-2xl">
+      <!-- CARD PRINCIPAL -->
+      <div class="lg:col-span-2 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-3xl p-10 shadow-2xl relative overflow-hidden">
 
-        <div class="flex items-center justify-between mb-8">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
 
-          <div>
-            <p class="text-zinc-400 text-sm uppercase tracking-widest">
-              Saldo disponible
-            </p>
+        <div class="relative z-10">
 
-            <h2
-              id="saldo"
-              class="text-5xl md:text-6xl font-black text-emerald-400 mt-3"
-            >
-              $0
-            </h2>
-          </div>
+          <p class="uppercase text-sm tracking-[0.3em] text-white/70 mb-4">
+            Saldo disponible
+          </p>
 
-          <div class="w-20 h-20 rounded-full bg-emerald-500/20 flex items-center justify-center text-3xl">
-            💳
-          </div>
+          <h2
+            id="saldo"
+            class="text-6xl md:text-7xl font-black"
+          >
+            $0
+          </h2>
 
-        </div>
+          <div class="grid grid-cols-2 gap-4 mt-10">
 
-        <!-- INFO -->
-        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-5 border border-white/10">
 
-          <div class="bg-zinc-800 border border-zinc-700 rounded-2xl p-5">
+              <p class="text-white/70 text-sm mb-2">
+                Número de cuenta
+              </p>
 
-            <p class="text-zinc-400 text-sm mb-2">
-              Estado
-            </p>
+              <h3
+                id="numeroCuenta"
+                class="text-2xl font-black"
+              >
+                00000000
+              </h3>
 
-            <h3 class="text-xl font-bold text-emerald-400">
-              Activa
-            </h3>
+            </div>
 
-          </div>
+            <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-5 border border-white/10">
 
-          <div class="bg-zinc-800 border border-zinc-700 rounded-2xl p-5">
+              <p class="text-white/70 text-sm mb-2">
+                Tipo
+              </p>
 
-            <p class="text-zinc-400 text-sm mb-2">
-              Tipo de cuenta
-            </p>
+              <h3
+                id="tipoCuenta"
+                class="text-2xl font-black capitalize"
+              >
+                ahorros
+              </h3>
 
-            <h3 class="text-xl font-bold">
-              Ahorros
-            </h3>
+            </div>
 
           </div>
 
@@ -94,7 +113,7 @@
 
       </div>
 
-      <!-- OPERACIONES -->
+      <!-- PANEL -->
       <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-2xl">
 
         <h3 class="text-2xl font-black mb-6">
@@ -106,12 +125,12 @@
           type="number"
           id="depositoInput"
           placeholder="Monto a depositar"
-          class="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-4 outline-none focus:border-emerald-500"
+          class="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-4"
         />
 
         <button
           id="depositBtn"
-          class="w-full bg-emerald-500 hover:bg-emerald-600 transition p-4 rounded-2xl font-bold text-lg shadow-lg mb-6"
+          class="w-full bg-emerald-500 hover:bg-emerald-600 transition p-4 rounded-2xl font-bold text-lg mb-6"
         >
           Depositar
         </button>
@@ -121,12 +140,12 @@
           type="number"
           id="retiroInput"
           placeholder="Monto a retirar"
-          class="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-4 outline-none focus:border-red-500"
+          class="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-4"
         />
 
         <button
           id="retiroBtn"
-          class="w-full bg-red-500 hover:bg-red-600 transition p-4 rounded-2xl font-bold text-lg shadow-lg mb-6"
+          class="w-full bg-red-500 hover:bg-red-600 transition p-4 rounded-2xl font-bold text-lg mb-6"
         >
           Retirar
         </button>
@@ -135,36 +154,23 @@
         <input
           type="text"
           id="cuentaDestinoInput"
-          placeholder="Número de cuenta destino"
-          class="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-4 outline-none focus:border-blue-500"
+          placeholder="Cuenta destino"
+          class="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-4"
         />
 
         <input
           type="number"
           id="transferenciaInput"
           placeholder="Monto a transferir"
-          class="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-4 outline-none focus:border-blue-500"
+          class="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-4"
         />
 
         <button
           id="transferBtn"
-          class="w-full bg-blue-500 hover:bg-blue-600 transition p-4 rounded-2xl font-bold text-lg shadow-lg"
+          class="w-full bg-blue-500 hover:bg-blue-600 transition p-4 rounded-2xl font-bold text-lg"
         >
           Transferir
         </button>
-
-        <!-- INFO -->
-        <div class="mt-8 pt-6 border-t border-zinc-800">
-
-          <p class="text-zinc-400 text-sm mb-2">
-            Seguridad
-          </p>
-
-          <p class="text-sm leading-relaxed text-zinc-300">
-            Operaciones protegidas mediante Supabase Auth, RPC y Row Level Security.
-          </p>
-
-        </div>
 
       </div>
 
@@ -173,25 +179,26 @@
     <!-- MOVIMIENTOS -->
     <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-2xl mt-8">
 
-      <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center justify-between mb-8">
 
-        <h3 class="text-3xl font-black">
-          Movimientos recientes
-        </h3>
+        <div>
 
-        <span class="text-zinc-500 text-sm">
-          Historial bancario
-        </span>
+          <h3 class="text-3xl font-black">
+            Historial bancario
+          </h3>
 
-      </div>
+          <p class="text-zinc-500 mt-2">
+            Movimientos recientes de la cuenta
+          </p>
 
-      <div id="movimientosContainer" class="space-y-4">
-
-        <p class="text-zinc-500">
-          No hay movimientos todavía.
-        </p>
+        </div>
 
       </div>
+
+      <div
+        id="movimientosContainer"
+        class="space-y-4"
+      ></div>
 
     </div>
 
