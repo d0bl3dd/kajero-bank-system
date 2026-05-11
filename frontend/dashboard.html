@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+            <h3 class="text-xl font-bold">
+              Ahorros
+            </h3>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- DEPÓSITO -->
+      <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-2xl">
+
+        <h3 class="text-2xl font-black mb-6">
+          Depositar dinero
+        </h3>
+
+        <input
+          type="number"
+          id="depositoInput"
+          placeholder="Ingrese monto"
+          class="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-5 outline-none focus:border-emerald-500"
+        >
+
+        <button
+          id="depositBtn"
+          class="w-full bg-emerald-500 hover:bg-emerald-600 transition p-4 rounded-2xl font-bold text-lg shadow-lg"
+        >
+          Depositar
+        </button>
+
+        <div class="mt-8 pt-6 border-t border-zinc-800">
+
+          <p class="text-zinc-400 text-sm mb-2">
+            Seguridad
+          </p>
+
+          <p class="text-sm leading-relaxed text-zinc-300">
+            Todas las operaciones son procesadas mediante funciones SQL protegidas por Supabase y RLS.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- MOVIMIENTOS -->
+    <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-2xl mt-8">
+
+      <div class="flex items-center justify-between mb-6">
+
+        <h3 class="text-3xl font-black">
+          Movimientos recientes
+        </h3>
+
+        <span class="text-zinc-500 text-sm">
+          Historial bancario
+        </span>
+
+      </div>
+
+      <div id="movimientosContainer" class="space-y-4">
+
+        <div class="bg-zinc-800 border border-zinc-700 rounded-2xl p-5 flex items-center justify-between">
+
+          <div>
+            <p class="font-bold text-lg">
+              Depósito inicial
+            </p>
+
+            <p class="text-zinc-400 text-sm">
+              Movimiento registrado
+            </p>
+          </div>
+
+          <span class="text-emerald-400 font-black text-xl">
+            +$100000
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script type="module" src="js/dashboard.js"></script>
+
+</body>
+</html>
