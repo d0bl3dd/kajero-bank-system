@@ -1,35 +1,159 @@
 <!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Dashboard | Kajero</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-zinc-950 text-white min-h-screen p-6">
+
+  <div class="max-w-6xl mx-auto">
+
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
+
+      <div>
+        <h1 class="text-4xl md:text-5xl font-black tracking-tight">
+          Kajero Bank
+        </h1>
+
+        <p class="text-zinc-400 mt-2">
+          Panel bancario principal
+        </p>
+      </div>
+
+      <button
+        id="logoutBtn"
+        class="bg-red-500 hover:bg-red-600 transition px-6 py-3 rounded-2xl font-semibold shadow-lg"
+      >
+        Cerrar sesión
+      </button>
+
+    </div>
+
+    <!-- GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- SALDO -->
+      <div class="lg:col-span-2 bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-2xl">
+
+        <div class="flex items-center justify-between mb-8">
+
+          <div>
+            <p class="text-zinc-400 text-sm uppercase tracking-widest">
+              Saldo disponible
+            </p>
+
+            <h2
+              id="saldo"
+              class="text-5xl md:text-6xl font-black text-emerald-400 mt-3"
+            >
+              $0
+            </h2>
+          </div>
+
+          <div class="w-20 h-20 rounded-full bg-emerald-500/20 flex items-center justify-center text-3xl">
+            💳
+          </div>
+
+        </div>
+
+        <!-- INFO -->
+        <div class="grid grid-cols-2 gap-4">
+
+          <div class="bg-zinc-800 border border-zinc-700 rounded-2xl p-5">
+
+            <p class="text-zinc-400 text-sm mb-2">
+              Estado
+            </p>
+
+            <h3 class="text-xl font-bold text-emerald-400">
+              Activa
+            </h3>
+
+          </div>
+
+          <div class="bg-zinc-800 border border-zinc-700 rounded-2xl p-5">
+
+            <p class="text-zinc-400 text-sm mb-2">
+              Tipo de cuenta
+            </p>
 
             <h3 class="text-xl font-bold">
               Ahorros
             </h3>
+
           </div>
 
         </div>
 
       </div>
 
-      <!-- DEPÓSITO -->
+      <!-- OPERACIONES -->
       <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-2xl">
 
         <h3 class="text-2xl font-black mb-6">
-          Depositar dinero
+          Operaciones
         </h3>
 
+        <!-- DEPÓSITO -->
         <input
           type="number"
           id="depositoInput"
-          placeholder="Ingrese monto"
-          class="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-5 outline-none focus:border-emerald-500"
-        >
+          placeholder="Monto a depositar"
+          class="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-4 outline-none focus:border-emerald-500"
+        />
 
         <button
           id="depositBtn"
-          class="w-full bg-emerald-500 hover:bg-emerald-600 transition p-4 rounded-2xl font-bold text-lg shadow-lg"
+          class="w-full bg-emerald-500 hover:bg-emerald-600 transition p-4 rounded-2xl font-bold text-lg shadow-lg mb-6"
         >
           Depositar
         </button>
 
+        <!-- RETIRO -->
+        <input
+          type="number"
+          id="retiroInput"
+          placeholder="Monto a retirar"
+          class="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-4 outline-none focus:border-red-500"
+        />
+
+        <button
+          id="retiroBtn"
+          class="w-full bg-red-500 hover:bg-red-600 transition p-4 rounded-2xl font-bold text-lg shadow-lg mb-6"
+        >
+          Retirar
+        </button>
+
+        <!-- TRANSFERENCIA -->
+        <input
+          type="text"
+          id="cuentaDestinoInput"
+          placeholder="Número de cuenta destino"
+          class="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-4 outline-none focus:border-blue-500"
+        />
+
+        <input
+          type="number"
+          id="transferenciaInput"
+          placeholder="Monto a transferir"
+          class="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-4 outline-none focus:border-blue-500"
+        />
+
+        <button
+          id="transferBtn"
+          class="w-full bg-blue-500 hover:bg-blue-600 transition p-4 rounded-2xl font-bold text-lg shadow-lg"
+        >
+          Transferir
+        </button>
+
+        <!-- INFO -->
         <div class="mt-8 pt-6 border-t border-zinc-800">
 
           <p class="text-zinc-400 text-sm mb-2">
@@ -37,7 +161,7 @@
           </p>
 
           <p class="text-sm leading-relaxed text-zinc-300">
-            Todas las operaciones son procesadas mediante funciones SQL protegidas por Supabase y RLS.
+            Operaciones protegidas mediante Supabase Auth, RPC y Row Level Security.
           </p>
 
         </div>
@@ -63,23 +187,9 @@
 
       <div id="movimientosContainer" class="space-y-4">
 
-        <div class="bg-zinc-800 border border-zinc-700 rounded-2xl p-5 flex items-center justify-between">
-
-          <div>
-            <p class="font-bold text-lg">
-              Depósito inicial
-            </p>
-
-            <p class="text-zinc-400 text-sm">
-              Movimiento registrado
-            </p>
-          </div>
-
-          <span class="text-emerald-400 font-black text-xl">
-            +$100000
-          </span>
-
-        </div>
+        <p class="text-zinc-500">
+          No hay movimientos todavía.
+        </p>
 
       </div>
 
@@ -90,4 +200,5 @@
   <script type="module" src="js/dashboard.js"></script>
 
 </body>
+
 </html>

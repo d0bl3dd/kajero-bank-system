@@ -1,14 +1,40 @@
 import { supabase } from './supabase.js';
 
-const saldoElement = document.getElementById('saldo');
-const logoutBtn = document.getElementById('logoutBtn');
+const saldoElement =
+  document.getElementById('saldo');
 
-const depositBtn = document.getElementById('depositBtn');
-const depositoInput = document.getElementById('depositoInput');
+const logoutBtn =
+  document.getElementById('logoutBtn');
 
-const movimientosContainer = document.getElementById(
-  'movimientosContainer'
-);
+const depositBtn =
+  document.getElementById('depositBtn');
+
+const depositoInput =
+  document.getElementById('depositoInput');
+
+const retiroBtn =
+  document.getElementById('retiroBtn');
+
+const retiroInput =
+  document.getElementById('retiroInput');
+
+const transferBtn =
+  document.getElementById('transferBtn');
+
+const transferenciaInput =
+  document.getElementById(
+    'transferenciaInput'
+  );
+
+const cuentaDestinoInput =
+  document.getElementById(
+    'cuentaDestinoInput'
+  );
+
+const movimientosContainer =
+  document.getElementById(
+    'movimientosContainer'
+  );
 
 let cuentaActual = null;
 
@@ -23,15 +49,19 @@ async function cargarCuenta() {
   console.log('ERROR USER:', userError);
 
   if (!user) {
-    window.location.href = '/frontend/index.html';
+
+    window.location.href =
+      '/frontend/index.html';
+
     return;
   }
 
-  const { data, error } = await supabase
-    .from('cuentas')
-    .select('*')
-    .eq('user_id', user.id)
-    .single();
+  const { data, error } =
+    await supabase
+      .from('cuentas')
+      .select('*')
+      .eq('user_id', user.id)
+      .single();
 
   console.log('CUENTA:', data);
   console.log('ERROR CUENTA:', error);
@@ -43,7 +73,10 @@ async function cargarCuenta() {
 
   cuentaActual = data;
 
-  saldoElement.textContent = `$${Number(data.saldo).toLocaleString()}`;
+  saldoElement.textContent =
+    `$${Number(
+      data.saldo
+    ).toLocaleString()}`;
 
   cargarMovimientos();
 }
@@ -52,14 +85,24 @@ async function cargarMovimientos() {
 
   if (!cuentaActual) return;
 
-  const { data, error } = await supabase
-    .from('movimientos')
-    .select('*')
-    .eq('cuenta_id', cuentaActual.id)
-    .order('created_at', { ascending: false });
+  const { data, error } =
+    await supabase
+      .from('movimientos')
+      .select('*')
+      .eq(
+        'cuenta_id',
+        cuentaActual.id
+      )
+      .order(
+        'created_at',
+        { ascending: false }
+      );
 
   console.log('MOVIMIENTOS:', data);
-  console.log('ERROR MOVIMIENTOS:', error);
+  console.log(
+    'ERROR MOVIMIENTOS:',
+    error
+  );
 
   if (error) {
     console.error(error);
@@ -82,20 +125,28 @@ async function cargarMovimientos() {
   data.forEach((mov) => {
 
     const positivo =
-      mov.tipo === 'deposito';
+
+      mov.tipo === 'deposito' ||
+
+      mov.tipo ===
+        'transferencia_recibida';
 
     movimientosContainer.innerHTML += `
 
       <div class="bg-zinc-800 border border-zinc-700 rounded-2xl p-5 flex items-center justify-between">
 
         <div>
+
           <p class="font-bold text-lg capitalize">
-            ${mov.tipo}
+            ${mov.tipo.replaceAll('_', ' ')}
           </p>
 
           <p class="text-zinc-400 text-sm">
-            ${new Date(mov.created_at).toLocaleString()}
+            ${new Date(
+              mov.created_at
+            ).toLocaleString()}
           </p>
+
         </div>
 
         <span class="${
@@ -104,7 +155,13 @@ async function cargarMovimientos() {
             : 'text-red-400'
         } font-black text-xl">
 
-          ${positivo ? '+' : '-'}$${Number(mov.monto).toLocaleString()}
+          ${
+            positivo
+              ? '+'
+              : '-'
+          }$${Number(
+            mov.monto
+          ).toLocaleString()}
 
         </span>
 
@@ -114,41 +171,178 @@ async function cargarMovimientos() {
   });
 }
 
-depositBtn.addEventListener('click', async () => {
+depositBtn.addEventListener(
+  'click',
+  async () => {
 
-  const monto = Number(depositoInput.value);
+    const monto =
+      Number(depositoInput.value);
 
-  if (monto <= 0) {
-    alert('Monto inválido');
-    return;
-  }
-
-  const { error } = await supabase.rpc(
-    'depositar',
-    {
-      cuenta_uuid: cuentaActual.id,
-      monto: monto
+    if (monto <= 0) {
+      alert('Monto inválido');
+      return;
     }
-  );
 
-  if (error) {
-    console.error(error);
-    alert(error.message);
-    return;
+    const { error } =
+      await supabase.rpc(
+        'depositar',
+        {
+          cuenta_uuid:
+            cuentaActual.id,
+
+          monto: monto
+        }
+      );
+
+    if (error) {
+      console.error(error);
+      alert(error.message);
+      return;
+    }
+
+    depositoInput.value = '';
+
+    alert(
+      'Depósito realizado correctamente'
+    );
+
+    cargarCuenta();
   }
+);
 
-  depositoInput.value = '';
+retiroBtn.addEventListener(
+  'click',
+  async () => {
 
-  alert('Depósito realizado correctamente');
+    const monto =
+      Number(retiroInput.value);
 
-  cargarCuenta();
-});
+    if (monto <= 0) {
+      alert('Monto inválido');
+      return;
+    }
 
-logoutBtn.addEventListener('click', async () => {
+    const { error } =
+      await supabase.rpc(
+        'retirar',
+        {
+          cuenta_uuid:
+            cuentaActual.id,
 
-  await supabase.auth.signOut();
+          monto: monto
+        }
+      );
 
-  window.location.href = '/frontend/index.html';
-});
+    if (error) {
+      console.error(error);
+      alert(error.message);
+      return;
+    }
+
+    retiroInput.value = '';
+
+    alert(
+      'Retiro realizado correctamente'
+    );
+
+    cargarCuenta();
+  }
+);
+
+transferBtn.addEventListener(
+  'click',
+  async () => {
+
+    const numeroCuenta =
+      cuentaDestinoInput.value.trim();
+
+    const monto =
+      Number(
+        transferenciaInput.value
+      );
+
+    if (!numeroCuenta) {
+
+      alert(
+        'Ingrese cuenta destino'
+      );
+
+      return;
+    }
+
+    if (monto <= 0) {
+      alert('Monto inválido');
+      return;
+    }
+
+    const {
+      data: cuentaDestino,
+      error: errorCuenta
+    } = await supabase
+      .from('cuentas')
+      .select('*')
+      .eq(
+        'numero_cuenta',
+        numeroCuenta
+      )
+      .single();
+
+    if (
+      errorCuenta ||
+      !cuentaDestino
+    ) {
+
+      alert(
+        'Cuenta destino no encontrada'
+      );
+
+      return;
+    }
+
+    const { error } =
+      await supabase.rpc(
+        'transferir',
+        {
+          cuenta_origen:
+            cuentaActual.id,
+
+          cuenta_destino:
+            cuentaDestino.id,
+
+          monto: monto
+        }
+      );
+
+    if (error) {
+
+      console.error(error);
+
+      alert(error.message);
+
+      return;
+    }
+
+    cuentaDestinoInput.value = '';
+
+    transferenciaInput.value = '';
+
+    alert(
+      'Transferencia realizada'
+    );
+
+    cargarCuenta();
+  }
+);
+
+logoutBtn.addEventListener(
+  'click',
+  async () => {
+
+    await supabase.auth.signOut();
+
+    window.location.href =
+      '/frontend/index.html';
+  }
+);
 
 cargarCuenta();
