@@ -1,0 +1,19 @@
+create table cuentas (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id),
+  saldo numeric default 0,
+  tipo text default 'ahorros',
+  created_at timestamp default now()
+);
+
+alter table cuentas enable row level security;
+
+create policy "ver solo su cuenta"
+on cuentas
+for select
+using (auth.uid() = user_id);
+
+create policy "actualizar solo su cuenta"
+on cuentas
+for update
+using (auth.uid() = user_id);
